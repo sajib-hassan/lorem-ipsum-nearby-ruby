@@ -1,4 +1,4 @@
-RSpec.describe ::FinleapNearby::Customers do
+RSpec.describe FinleapNearby::Customers do
 
   before do
     @valid_data_file_path   = ::FinleapNearby::Customers::DATA_FILE_PATH

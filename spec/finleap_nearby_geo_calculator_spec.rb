@@ -1,4 +1,4 @@
-RSpec.describe ::FinleapNearby::GeoCalculator do
+RSpec.describe FinleapNearby::GeoCalculator do
   describe ".distance" do
 
     context "two points spherical distance" do
