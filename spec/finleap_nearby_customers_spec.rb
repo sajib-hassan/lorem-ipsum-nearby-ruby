@@ -6,7 +6,7 @@ RSpec.describe ::FinleapNearby::Customers do
     @invalid_customers_data = "spec/data/invalid_customers_data.json"
   end
 
-  describe ".initialize" do
+  describe "#initialize" do
     context "argument validations" do
 
       context "invalid arguments" do
@@ -69,7 +69,7 @@ RSpec.describe ::FinleapNearby::Customers do
     end
   end
 
-  describe "#valid_keys?" do
+  describe ".valid_keys?" do
     context "customer data keys validation" do
       it "that has valid customer data keys" do
         expect do
@@ -89,7 +89,7 @@ RSpec.describe ::FinleapNearby::Customers do
     end
   end
 
-  describe ".calculate" do
+  describe "#calculate" do
     context "validate nearby customer data" do
       context "center point for berlin office (52.508283, 13.329657)" do
 
