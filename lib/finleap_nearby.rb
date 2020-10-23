@@ -29,7 +29,7 @@ module FinleapNearby
     attr_accessor :search_radius, :search_radius_unit, :data_file_path, :center_point, :customer_data_keys
 
     DATA_FILE_PATH     = "data/customers.json"
-    SEARCH_RADIUS      = 100.00
+    SEARCH_RADIUS      = 100
     SEARCH_RADIUS_UNIT = :km
 
     # The GPS coordinates for Berlin office are 52.508283, 13.329657

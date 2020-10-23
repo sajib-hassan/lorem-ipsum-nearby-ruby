@@ -3,7 +3,12 @@ require_relative "../lib/finleap_nearby"
 namespace "finleap_nearby" do
   desc "Find the nearby customers from dataset"
   task :customers, [:radius, :radius_unit] do |t, args|
-    args.with_defaults(:radius => 100, :radius_unit => :km)
+    ::FinleapNearby.config_defaults
+
+    args.with_defaults(
+        :radius => ::FinleapNearby.configuration.search_radius,
+        :radius_unit => ::FinleapNearby.configuration.search_radius_unit
+    )
 
     customers = ::FinleapNearby::Customers.new(
         search_radius:      args.radius,
