@@ -10,11 +10,12 @@ namespace "finleap_nearby" do
         search_radius_unit: args.radius_unit
     ).calculate.customers
 
+    message = "found within the radius #{args.radius}#{args.radius_unit}"
     unless customers.empty?
-      puts "#{customers.size} customer#{customers.size > 1 ? "s" : "" } found in the radius #{args.radius}#{args.radius_unit}"
+      puts "#{customers.size} customer#{customers.size > 1 ? "s" : "" } #{message}"
       puts customers
     else
-      puts "No customer found in the radius #{args.radius}#{args.radius_unit}"
+      puts "No customer #{message}"
     end
   end
 end

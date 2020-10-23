@@ -1,19 +1,15 @@
 module FinleapNearby
   class Customers
-    DATA_FILE_PATH     = "data/customers.json"
-    SEARCH_RADIUS      = 100.00
-    SEARCH_RADIUS_UNIT = :km
-
-    # The GPS coordinates for Berlin office are 52.508283, 13.329657
-    CENTER_POINT = [52.508283, 13.329657]
 
     attr_reader :customers
 
     def initialize(search_radius: nil, search_radius_unit: nil, data_file_path: nil, center_point: nil)
-      @search_radius      = search_radius || SEARCH_RADIUS
-      @search_radius_unit = search_radius_unit || SEARCH_RADIUS_UNIT
-      @data_file_path     = data_file_path || DATA_FILE_PATH
-      @center_point       = center_point || CENTER_POINT
+      ::FinleapNearby.config_defaults
+
+      @search_radius      = search_radius || ::FinleapNearby.configuration.search_radius
+      @search_radius_unit = search_radius_unit || ::FinleapNearby.configuration.search_radius_unit
+      @data_file_path     = data_file_path || ::FinleapNearby.configuration.data_file_path
+      @center_point       = center_point || ::FinleapNearby.configuration.center_point
 
       @search_radius      = @search_radius.to_f
       @search_radius_unit = @search_radius_unit.to_sym
@@ -31,7 +27,7 @@ module FinleapNearby
     end
 
     def self.valid_keys?(customer)
-      (["user_id", "name", "latitude", "longitude"] - customer.keys).empty?
+      (::FinleapNearby.configuration.customer_data_keys - customer.keys).empty?
     end
 
     private
@@ -49,7 +45,6 @@ module FinleapNearby
         raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(customer)
 
         @customers << customer.slice("user_id", "name") if @search_radius >= calculate_distance(customer)
-        # p "#{customer["user_id"]}, #{customer["name"]}, #{calculate_distance(customer)}" @todo remove this line
       end
     end
 
