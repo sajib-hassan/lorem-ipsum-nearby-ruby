@@ -147,7 +147,7 @@ Alternatively, you can also pass the search data (sequentially accepts radius, r
 
 **Output:**
 ```shell script
-finleap_nearby git:(main) $ rake "finleap_nearby:customers[50,km]" 
+finleap_nearby git:(main) $ rake "finleap_nearby:customers[50,km,distance]" 
 1 customer found within the radius 50km
 {"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
 ```
