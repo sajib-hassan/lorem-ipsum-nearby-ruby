@@ -57,11 +57,11 @@ This gem considered the `default values` as below under the `Configuration` clas
     # Matched customers sort by
     RESULT_SORT_BY = "user_id"
 
-    # default output data keys of the matched customer data
+    # default result data keys of the matched customer data
     DEFAULT_RESULT_DATA_KEYS = %w[user_id name]
 ```
 
-You can overwrite these default values through initialization code in `your APP`.
+You can override these default values through initialization code in `your APP`.
 ```ruby
 ::FinleapNearby.configure do |config|
       config.search_radius = 100 # Matching customers within this radius
@@ -69,7 +69,7 @@ You can overwrite these default values through initialization code in `your APP`
       config.center_point = [52.508283, 13.329657] # Center point to make search
       config.data_file_path = "data/customers.json"  # Relative or Absolute text file path
       config.result_sort_by = "distance"  # Sort by calculative field distance
-      config.result_data_keys = %w[user_id name distance]  # Relative or Absolute text file path
+      config.result_data_keys = %w[user_id name distance]  # result data keys of the matched customer data
     end
 ```
 
@@ -115,7 +115,7 @@ Output:
 
 #### Using `rake task` - `task/nearby_customers.rb`
 
-You can run task `finleap_nearby:customers` in the file `task/nearby_customers.rb` with the defaults. 
+You can run task `finleap_nearby:customers` in the file `task/nearby_customers.rb` with the defaults and preferred result data keys `%w[user_id name distance]`. 
     
     $ rake finleap_nearby:customers
     
@@ -139,11 +139,11 @@ finleap_nearby git:(main) $ rake finleap_nearby:customers
 ```
 
     
-Alternatively, you can also pass the search data (sequentially accepts radius & radius unit) in parameter. 
+Alternatively, you can also pass the search data (sequentially accepts radius, radius unit, and result sort by) in parameter. 
 
 **Don't forget to enclosed with `"` while using parameters.** 
 
-    $ rake "finleap_nearby:customers[50,km]"
+    $ rake "finleap_nearby:customers[50,km,distance]"
 
 **Output:**
 ```shell script

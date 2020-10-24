@@ -23,7 +23,7 @@ module FinleapNearby
     # Matched customers sort by
     RESULT_SORT_BY = "user_id"
 
-    # default output data keys of the matched customer data
+    # default result data keys of the matched customer data
     DEFAULT_RESULT_DATA_KEYS = %w[user_id name]
 
     # required data keys in the customer data file
