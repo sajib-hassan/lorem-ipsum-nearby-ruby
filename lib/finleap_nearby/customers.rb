@@ -31,7 +31,7 @@ module FinleapNearby
     end
 
     ##
-    # Calculate the matched customers and sort by "user_id"
+    # Filter customers within the radius and sort the result
     #
     def filter_and_sort(sort_by = nil)
       filter_customers
@@ -40,12 +40,17 @@ module FinleapNearby
       self
     end
 
-    def customers(output_keys = nil)
-      output_keys ||= ::FinleapNearby.configuration.result_data_keys
-      @customers.map{|customer| customer.slice(*output_keys)}
+    ##
+    # Get the customers with the preferred data columns/keys
+    #
+    def customers(data_keys = nil)
+      data_keys ||= ::FinleapNearby.configuration.result_data_keys
+      @customers.map { |customer| customer.slice(*data_keys) }
     end
 
-
+    ##
+    # Filter customers within the radius
+    #
     def filter_customers
       File.foreach(@data_file_path) do |customer|
         customer = JSON.parse(customer)
@@ -53,12 +58,15 @@ module FinleapNearby
         raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(customer)
 
         distance = calculate_distance(customer)
-        @customers << customer.merge({"distance" => distance}) if @search_radius >= distance
+        @customers << customer.merge({ "distance" => distance }) if @search_radius >= distance
       end
 
       self
     end
 
+    ##
+    # Sort the customers withy the provided column/key
+    #
     def sort_customers(sort_by)
       sort_by ||= ::FinleapNearby.configuration.result_sort_by
 
@@ -72,6 +80,9 @@ module FinleapNearby
 
     private
 
+    ##
+    # calculate distance of a customer from the center point
+    #
     def calculate_distance(customer)
       ::FinleapNearby::GeoCalculator.distance(@center_point,
                                               [customer["latitude"], customer["longitude"]],
@@ -80,5 +91,4 @@ module FinleapNearby
     end
 
   end
-
 end
