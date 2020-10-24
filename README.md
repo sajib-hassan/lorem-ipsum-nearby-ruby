@@ -34,7 +34,7 @@ Or install it yourself as:
 
 #### Configuration
 
-This gem considered the `default values` as below under the `Configuration` class in `lib/finleap_nearby.rb`:
+This gem considered the `default values` as below under the `Configuration` class in `lib/finleap_nearby/configuration.rb`:
 ```ruby
     # Customer data file. Which must be -
     # - Text file (`data/customers.json`)
@@ -67,8 +67,9 @@ You can overwrite these default values through initialization code in `your APP`
       config.search_radius = 100 # Matching customers within this radius
       config.search_radius_unit = :km # either :km for Kilometer or :mi for Mile
       config.center_point = [52.508283, 13.329657] # Center point to make search
-      config.data_file_path = "data/customers.json"  # Relative or Absolute text file path 
-      config.required_data_keys = %w[user_id name latitude longitude]  # required data keys in the customer data file
+      config.data_file_path = "data/customers.json"  # Relative or Absolute text file path
+      config.result_sort_by = "distance"  # Sort by calculative field distance
+      config.result_data_keys = %w[user_id name distance]  # Relative or Absolute text file path
     end
 ```
 
@@ -102,13 +103,14 @@ Also, you can sort the matched customer by passing the key name (default is `use
 customers = ::FinleapNearby::Customers.new(
         search_radius:      50,
         search_radius_unit: :km
-    ).filter_and_sort("user_id").customers
+    ).filter_and_sort("user_id").customers(%w[user_id name distance])
+
 puts customers
 ```
 
 Output:
 ```ruby
-{"user_id"=>6, "name"=>"Nolan Little"}
+{"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
 ```
 
 #### Using `rake task` - `task/nearby_customers.rb`
@@ -121,18 +123,19 @@ Output:
 ```shell script
 finleap_nearby git:(main) $ rake finleap_nearby:customers
 12 customers found within the radius 100km
-{"user_id"=>4, "name"=>"Ernesto Breitenberg"}
-{"user_id"=>6, "name"=>"Nolan Little"}
-{"user_id"=>14, "name"=>"Burt Klein Esq."}
-{"user_id"=>19, "name"=>"Eldridge Funk DDS"}
-{"user_id"=>25, "name"=>"Maggie Trantow"}
-{"user_id"=>29, "name"=>"Arden Kshlerin"}
-{"user_id"=>30, "name"=>"Candi Larkin"}
-{"user_id"=>35, "name"=>"Blondell Hermiston"}
-{"user_id"=>36, "name"=>"Kemberly Durgan DC"}
-{"user_id"=>40, "name"=>"Rafael Streich IV"}
-{"user_id"=>42, "name"=>"Raymundo Schuster"}
-{"user_id"=>49, "name"=>"Cole Predovic JD"}
+{"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
+{"user_id"=>4, "name"=>"Ernesto Breitenberg", "distance"=>51.425}
+{"user_id"=>19, "name"=>"Eldridge Funk DDS", "distance"=>51.483}
+{"user_id"=>42, "name"=>"Raymundo Schuster", "distance"=>56.608}
+{"user_id"=>29, "name"=>"Arden Kshlerin", "distance"=>63.088}
+{"user_id"=>25, "name"=>"Maggie Trantow", "distance"=>70.169}
+{"user_id"=>49, "name"=>"Cole Predovic JD", "distance"=>72.765}
+{"user_id"=>40, "name"=>"Rafael Streich IV", "distance"=>77.975}
+{"user_id"=>14, "name"=>"Burt Klein Esq.", "distance"=>80.75}
+{"user_id"=>30, "name"=>"Candi Larkin", "distance"=>89.476}
+{"user_id"=>36, "name"=>"Kemberly Durgan DC", "distance"=>91.655}
+{"user_id"=>35, "name"=>"Blondell Hermiston", "distance"=>94.534}
+
 ```
 
     
@@ -146,7 +149,7 @@ Alternatively, you can also pass the search data (sequentially accepts radius & 
 ```shell script
 finleap_nearby git:(main) $ rake "finleap_nearby:customers[50,km]" 
 1 customer found within the radius 50km
-{"user_id"=>6, "name"=>"Nolan Little"}
+{"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
 ```
 
 ## Development
