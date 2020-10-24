@@ -219,7 +219,6 @@ RSpec.describe FinleapNearby::Customers do
 
         actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers(%w[user_id name distance])
 
-        p actual_customers
         expect(actual_customers).to eql(expected_customers)
       end
     end
