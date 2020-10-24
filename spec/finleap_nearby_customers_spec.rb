@@ -2,7 +2,7 @@ RSpec.describe FinleapNearby::Customers do
 
   before do
     ::FinleapNearby.configure do |config|
-      config.search_radius = 100
+      config.search_radius      = 100
       config.search_radius_unit = :km
     end
     @valid_data_file_path   = ::FinleapNearby.configuration.data_file_path
@@ -93,7 +93,49 @@ RSpec.describe FinleapNearby::Customers do
     end
   end
 
-  describe "#calculate" do
+
+  describe "#filter_customers" do
+    context "filter customer data" do
+      it "within 100km, unsorted" do
+        expected_customers = [
+            { "user_id" => 4, "name" => "Ernesto Breitenberg" }, { "user_id" => 19, "name" => "Eldridge Funk DDS" },
+            { "user_id" => 30, "name" => "Candi Larkin" }, { "user_id" => 14, "name" => "Burt Klein Esq." },
+            { "user_id" => 6, "name" => "Nolan Little" }, { "user_id" => 36, "name" => "Kemberly Durgan DC" },
+            { "user_id" => 49, "name" => "Cole Predovic JD" }, { "user_id" => 25, "name" => "Maggie Trantow" },
+            { "user_id" => 40, "name" => "Rafael Streich IV" }, { "user_id" => 29, "name" => "Arden Kshlerin" },
+            { "user_id" => 35, "name" => "Blondell Hermiston" }, { "user_id" => 42, "name" => "Raymundo Schuster" }
+        ]
+        actual_customers   = ::FinleapNearby::Customers.new.filter_customers.customers
+        expect(actual_customers).to eql(expected_customers)
+      end
+    end
+  end
+
+  describe "#sort_customers" do
+    context "filter customer data and sort" do
+      it "within 100km, sort by user_id" do
+        expected_customers = [
+            { "user_id" => 4, "name" => "Ernesto Breitenberg" },
+            { "user_id" => 6, "name" => "Nolan Little" },
+            { "user_id" => 14, "name" => "Burt Klein Esq." },
+            { "user_id" => 19, "name" => "Eldridge Funk DDS" },
+            { "user_id" => 25, "name" => "Maggie Trantow" },
+            { "user_id" => 29, "name" => "Arden Kshlerin" },
+            { "user_id" => 30, "name" => "Candi Larkin" },
+            { "user_id" => 35, "name" => "Blondell Hermiston" },
+            { "user_id" => 36, "name" => "Kemberly Durgan DC" },
+            { "user_id" => 40, "name" => "Rafael Streich IV" },
+            { "user_id" => 42, "name" => "Raymundo Schuster" },
+            { "user_id" => 49, "name" => "Cole Predovic JD" }
+        ]
+
+        actual_customers = ::FinleapNearby::Customers.new.filter_customers.sort_customers("user_id").customers
+        expect(actual_customers).to eql(expected_customers)
+      end
+    end
+  end
+
+  describe "#filter_and_sort" do
     context "validate nearby customer data" do
       context "center point for berlin office (52.508283, 13.329657)" do
 
@@ -112,37 +154,75 @@ RSpec.describe FinleapNearby::Customers do
               { "user_id" => 42, "name" => "Raymundo Schuster" },
               { "user_id" => 49, "name" => "Cole Predovic JD" }
           ]
-          expect do
-            actual_customers = ::FinleapNearby::Customers.new.calculate.customers
-            expect(actual_customers).to eql(expected_customers)
-          end.not_to raise_error
+          actual_customers   = ::FinleapNearby::Customers.new.filter_and_sort.customers
+          expect(actual_customers).to eql(expected_customers)
         end
 
         it "that has correct customers for 50 km radius" do
           expected_customers = [{ "user_id" => 6, "name" => "Nolan Little" }]
-          expect do
-            actual_customers = ::FinleapNearby::Customers.new(search_radius: 50).calculate.customers
-            expect(actual_customers).to eql(expected_customers)
-          end.not_to raise_error
+          actual_customers   = ::FinleapNearby::Customers.new(search_radius: 50).filter_and_sort.customers
+          expect(actual_customers).to eql(expected_customers)
         end
 
         it "that has no customer for 20 km radius" do
           expected_customers = []
-          expect do
-            actual_customers = ::FinleapNearby::Customers.new(search_radius: 20).calculate.customers
-            expect(actual_customers).to eql(expected_customers)
-          end.not_to raise_error
+          actual_customers   = ::FinleapNearby::Customers.new(search_radius: 20).filter_and_sort.customers
+          expect(actual_customers).to eql(expected_customers)
         end
 
         it "no outside customers of 100 km radius should be found in the results" do
           outside_customers = { "user_id" => 3, "name" => "Mary Pacocha III" }
-          expect do
-            actual_customers = ::FinleapNearby::Customers.new(search_radius: 100).calculate.customers
-            expect(actual_customers).not_to include(outside_customers)
-          end.not_to raise_error
+          actual_customers  = ::FinleapNearby::Customers.new(search_radius: 100).filter_and_sort.customers
+          expect(actual_customers).not_to include(outside_customers)
         end
       end
     end
-
   end
+
+  describe "#customers" do
+    context "result data" do
+      it "with default result keys [user_id, name]" do
+        expected_customers = [
+            { "user_id" => 4, "name" => "Ernesto Breitenberg" },
+            { "user_id" => 6, "name" => "Nolan Little" },
+            { "user_id" => 14, "name" => "Burt Klein Esq." },
+            { "user_id" => 19, "name" => "Eldridge Funk DDS" },
+            { "user_id" => 25, "name" => "Maggie Trantow" },
+            { "user_id" => 29, "name" => "Arden Kshlerin" },
+            { "user_id" => 30, "name" => "Candi Larkin" },
+            { "user_id" => 35, "name" => "Blondell Hermiston" },
+            { "user_id" => 36, "name" => "Kemberly Durgan DC" },
+            { "user_id" => 40, "name" => "Rafael Streich IV" },
+            { "user_id" => 42, "name" => "Raymundo Schuster" },
+            { "user_id" => 49, "name" => "Cole Predovic JD" }
+        ]
+
+        actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers
+        expect(actual_customers).to eql(expected_customers)
+      end
+
+      it "with customized result keys [user_id, name, distance]" do
+        expected_customers = [
+            { "user_id" => 4, "name" => "Ernesto Breitenberg", "distance" => 51.425 },
+            { "user_id" => 6, "name" => "Nolan Little", "distance" => 41.142 },
+            { "user_id" => 14, "name" => "Burt Klein Esq.", "distance" => 80.75 },
+            { "user_id" => 19, "name" => "Eldridge Funk DDS", "distance" => 51.483 },
+            { "user_id" => 25, "name" => "Maggie Trantow", "distance" => 70.169 },
+            { "user_id" => 29, "name" => "Arden Kshlerin", "distance" => 63.088 },
+            { "user_id" => 30, "name" => "Candi Larkin", "distance" => 89.476 },
+            { "user_id" => 35, "name" => "Blondell Hermiston", "distance" => 94.534 },
+            { "user_id" => 36, "name" => "Kemberly Durgan DC", "distance" => 91.655 },
+            { "user_id" => 40, "name" => "Rafael Streich IV", "distance" => 77.975 },
+            { "user_id" => 42, "name" => "Raymundo Schuster", "distance" => 56.608 },
+            { "user_id" => 49, "name" => "Cole Predovic JD", "distance" => 72.765 }
+        ]
+
+        actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers(%w[user_id name distance])
+
+        p actual_customers
+        expect(actual_customers).to eql(expected_customers)
+      end
+    end
+  end
+
 end
