@@ -98,7 +98,7 @@ Output:
 ```
 
 Alternatively, with the `named` parameters to override the defaults. 
-Also, you can sort the matched customer by passing the key name (default is `user_id`) from the customer data. 
+Also, you can sort the matched customer by passing a data key name (default is `user_id`). Valid sort key names are customer object keys, and `distance`. 
 ```ruby
 customers = ::FinleapNearby::Customers.new(
         search_radius:      50,
