@@ -3,7 +3,7 @@ require_relative 'lib/finleap_nearby/version'
 Gem::Specification.new do |spec|
   spec.name          = "finleap_nearby"
   spec.version       = FinleapNearby::VERSION
-  spec.authors       = ["Sajib Hassan"]
+  spec.authors       = ["A T M Hassan Uzzaman"]
   spec.email         = ["sajib.hassan@gmail.com"]
 
   spec.summary       = %q{read the full list of customers and output the names and user ids of matching customers

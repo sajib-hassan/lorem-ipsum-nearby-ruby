@@ -1,8 +1,18 @@
-# FinleapNearby
+# Finleap - Nearby Customers
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/finleap_nearby`. To experiment with that code, run `bin/console` for an interactive prompt.
+**This is a gem for a Tech challenge for the position of (Senior) Ruby on Rails Engineer at finleap connect** 
 
-TODO: Delete this and the text above, and describe your gem
+## The Tech Challenge
+We have some customer records in a text file (`data/customers.json`) -- one customer data per line, JSON-encoded. We want to invite any customer within 100km of our Berlin office for some food and drinks. 
+
+Write a program that will `read the full list of customers` and output the `names and user ids` of matching customers (within `100km`), `sorted by User ID (ascending)`.
+
+- You can use the `first formula` from [this Wikipedia article](https://en.wikipedia.org/wiki/Great-circle_distance) to
+calculate distance. Don't forget, you'll need to `convert degrees to
+radians`.
+- The GPS coordinates for our `Berlin office are 52.508283,
+13.329657`
+- You can find the Customer list [here](https://gist.github.com/flood4life/aa8fcb88243b6d96287c4b1dc63948de).
 
 ## Installation
 
@@ -22,23 +32,128 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+#### Configuration
+
+This gem considered the `default values` as below under the `Configuration` class in `lib/finleap_nearby.rb`:
+```ruby
+    # Customer data file. Which must be -
+    # - Text file (`data/customers.json`)
+    # - one customer data per line, JSON-encoded.
+    DATA_FILE_PATH = "data/customers.json"
+
+    # Matching customers within this radius
+    SEARCH_RADIUS = 100
+
+    # Matching customers within the radius in units, default is :km
+    # Available options are -
+    # - :km for Kilometer
+    # - :mi for Mile
+    SEARCH_RADIUS_UNIT = :km
+
+    # Center point to match the customer's coordinate ([lat,lon])
+    # The GPS coordinates for Berlin office are 52.508283, 13.329657
+    CENTER_POINT = [52.508283, 13.329657]
+
+    # Matched customers sort by
+    RESULT_SORT_BY = "user_id"
+
+    # default output data keys of the matched customer data
+    DEFAULT_RESULT_DATA_KEYS = %w[user_id name]
+```
+
+You can overwrite these default values through initialization code in `your APP`.
+```ruby
+::FinleapNearby.configure do |config|
+      config.search_radius = 100 # Matching customers within this radius
+      config.search_radius_unit = :km # either :km for Kilometer or :mi for Mile
+      config.center_point = [52.508283, 13.329657] # Center point to make search
+      config.data_file_path = "data/customers.json"  # Relative or Absolute text file path 
+      config.required_data_keys = %w[user_id name latitude longitude]  # required data keys in the customer data file
+    end
+```
+
+#### Use Library - `lib/finleap_nearby/customers.rb`
+
+Get the matching customers data by this Gem with the default values and sort by `user_id` - 
+```ruby
+customers = ::FinleapNearby::Customers.new.filter_and_sort.customers
+puts customers
+```
+
+Output:
+```ruby
+{"user_id"=>4, "name"=>"Ernesto Breitenberg"}
+{"user_id"=>6, "name"=>"Nolan Little"}
+{"user_id"=>14, "name"=>"Burt Klein Esq."}
+{"user_id"=>19, "name"=>"Eldridge Funk DDS"}
+{"user_id"=>25, "name"=>"Maggie Trantow"}
+{"user_id"=>29, "name"=>"Arden Kshlerin"}
+{"user_id"=>30, "name"=>"Candi Larkin"}
+{"user_id"=>35, "name"=>"Blondell Hermiston"}
+{"user_id"=>36, "name"=>"Kemberly Durgan DC"}
+{"user_id"=>40, "name"=>"Rafael Streich IV"}
+{"user_id"=>42, "name"=>"Raymundo Schuster"}
+{"user_id"=>49, "name"=>"Cole Predovic JD"}
+```
+
+Alternatively, with the `named` parameters to override the defaults. 
+Also, you can sort the matched customer by passing the key name (default is `user_id`) from the customer data. 
+```ruby
+customers = ::FinleapNearby::Customers.new(
+        search_radius:      50,
+        search_radius_unit: :km
+    ).filter_and_sort("user_id").customers
+puts customers
+```
+
+Output:
+```ruby
+{"user_id"=>6, "name"=>"Nolan Little"}
+```
+
+#### Using `rake task` - `task/nearby_customers.rb`
+
+You can run task `finleap_nearby:customers` in the file `task/nearby_customers.rb` with the defaults. 
+    
+    $ rake finleap_nearby:customers
+    
+Output:
+```shell script
+finleap_nearby git:(main) $ rake finleap_nearby:customers
+12 customers found within the radius 100km
+{"user_id"=>4, "name"=>"Ernesto Breitenberg"}
+{"user_id"=>6, "name"=>"Nolan Little"}
+{"user_id"=>14, "name"=>"Burt Klein Esq."}
+{"user_id"=>19, "name"=>"Eldridge Funk DDS"}
+{"user_id"=>25, "name"=>"Maggie Trantow"}
+{"user_id"=>29, "name"=>"Arden Kshlerin"}
+{"user_id"=>30, "name"=>"Candi Larkin"}
+{"user_id"=>35, "name"=>"Blondell Hermiston"}
+{"user_id"=>36, "name"=>"Kemberly Durgan DC"}
+{"user_id"=>40, "name"=>"Rafael Streich IV"}
+{"user_id"=>42, "name"=>"Raymundo Schuster"}
+{"user_id"=>49, "name"=>"Cole Predovic JD"}
+```
+
+    
+Alternatively, you can also pass the search data (sequentially accepts radius & radius unit) in parameter. 
+
+**Don't forget to enclosed with `"` while using parameters.** 
+
+    $ rake "finleap_nearby:customers[50,km]"
+
+**Output:**
+```shell script
+finleap_nearby git:(main) $ rake "finleap_nearby:customers[50,km]" 
+1 customer found within the radius 50km
+{"user_id"=>6, "name"=>"Nolan Little"}
+```
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/sajib-hassan/finleap_nearby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/sajib-hassan/finleap_nearby/blob/master/CODE_OF_CONDUCT.md).
-
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the FinleapNearby project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/sajib-hassan/finleap_nearby/blob/master/CODE_OF_CONDUCT.md).
