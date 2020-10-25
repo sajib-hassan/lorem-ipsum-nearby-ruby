@@ -104,7 +104,9 @@ Also, you can sort the matched customer by passing a data key name (default is `
 ```ruby
 customers = ::FinleapNearby::Customers.new(
         search_radius:      50,
-        search_radius_unit: :km
+        search_radius_unit: :km,
+        data_file_path: "data/customers.json", 
+        center_point: [52.508283, 13.329657]
     ).filter_and_sort("user_id").customers(%w[user_id name distance])
 
 puts customers

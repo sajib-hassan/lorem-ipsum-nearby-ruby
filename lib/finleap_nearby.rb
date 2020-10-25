@@ -1,7 +1,7 @@
 require "finleap_nearby/version"
 require "json"
 require "finleap_nearby/extension"
-require "finleap_nearby/configuration"
+require "finleap_nearby/config"
 require "finleap_nearby/geo_calculator"
 require "finleap_nearby/customers"
 
@@ -17,15 +17,18 @@ module FinleapNearby
   class InvalidSortKey < Error; end
 
   class << self
-    attr_accessor :configuration
+    attr_writer :config
   end
 
-  def self.config_defaults
-    self.configuration ||= Configuration.new
+  def self.config
+    @config ||= Config.new
+  end
+
+  def self.reset
+    @config = Config.new
   end
 
   def self.configure
-    self.configuration ||= Configuration.new
-    yield(configuration) if block_given?
+    yield(config)
   end
 end

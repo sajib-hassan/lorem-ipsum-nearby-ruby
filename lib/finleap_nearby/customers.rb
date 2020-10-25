@@ -5,12 +5,10 @@ module FinleapNearby
     # Accept named parameters
     #
     def initialize(search_radius: nil, search_radius_unit: nil, data_file_path: nil, center_point: nil)
-      ::FinleapNearby.config_defaults
-
-      @search_radius = search_radius || ::FinleapNearby.configuration.search_radius
-      @search_radius_unit = search_radius_unit || ::FinleapNearby.configuration.search_radius_unit
-      @data_file_path = data_file_path || ::FinleapNearby.configuration.data_file_path
-      @center_point = center_point || ::FinleapNearby.configuration.center_point
+      @search_radius = search_radius || ::FinleapNearby.config.search_radius
+      @search_radius_unit = search_radius_unit || ::FinleapNearby.config.search_radius_unit
+      @data_file_path = data_file_path || ::FinleapNearby.config.data_file_path
+      @center_point = center_point || ::FinleapNearby.config.center_point
 
       @search_radius = @search_radius.to_f
       @search_radius_unit = @search_radius_unit.to_sym
@@ -20,7 +18,7 @@ module FinleapNearby
     end
 
     def self.valid_keys?(customer)
-      (::FinleapNearby::Configuration::REQUIRED_DATA_KEYS - customer.keys).empty?
+      (::FinleapNearby.config.required_data_keys - customer.keys).empty?
     end
 
     def validate_params
@@ -43,7 +41,7 @@ module FinleapNearby
     # Get the customers with the preferred data columns/keys
     #
     def customers(data_keys = nil)
-      data_keys ||= ::FinleapNearby.configuration.result_data_keys
+      data_keys ||= ::FinleapNearby.config.result_data_keys
       @customers.map { |customer| customer.slice(*data_keys) }
     end
 
@@ -67,7 +65,7 @@ module FinleapNearby
     # Sort the customers within the provided column/key
     #
     def sort_customers(sort_by)
-      sort_by ||= ::FinleapNearby.configuration.result_sort_by
+      sort_by ||= ::FinleapNearby.config.result_sort_by
 
       return [] if @customers.empty?
       raise ::FinleapNearby::InvalidSortKey, "Invalid sort key" unless @customers.first.has_key?(sort_by)

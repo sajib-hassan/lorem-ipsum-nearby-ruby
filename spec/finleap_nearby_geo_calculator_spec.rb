@@ -1,6 +1,4 @@
 RSpec.describe FinleapNearby::GeoCalculator do
-  before { ::FinleapNearby.config_defaults }
-
   describe ".distance" do
     context "two points spherical distance" do
       it "in kilometers" do
@@ -22,7 +20,7 @@ RSpec.describe FinleapNearby::GeoCalculator do
           "latitude" => 54.0653745433511,
           "longitude" => 15.175624975930294
         }
-        distance_in_km = ::FinleapNearby::GeoCalculator.distance(::FinleapNearby.configuration.center_point,
+        distance_in_km = ::FinleapNearby::GeoCalculator.distance(::FinleapNearby.config.center_point,
           [customer["latitude"], customer["longitude"]],
           {units: :km})
 

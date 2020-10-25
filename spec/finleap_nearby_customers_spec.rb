@@ -4,7 +4,7 @@ RSpec.describe FinleapNearby::Customers do
       config.search_radius = 100
       config.search_radius_unit = :km
     end
-    @valid_data_file_path = ::FinleapNearby.configuration.data_file_path
+    @valid_data_file_path = ::FinleapNearby.config.data_file_path
     @invalid_customers_file = "spec/data/invalid_customers_file.json"
     @invalid_customers_data = "spec/data/invalid_customers_data.json"
   end
