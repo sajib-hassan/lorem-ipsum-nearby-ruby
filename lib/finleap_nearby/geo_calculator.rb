@@ -39,11 +39,11 @@ module FinleapNearby
       point2 = to_radians(point2)
 
       # compute deltas
-      dlat = point2[0] - point1[0]
-      dlon = point2[1] - point1[1]
+      lat_diff = point2[0] - point1[0]
+      lon_diff = point2[1] - point1[1]
 
-      a = (Math.sin(dlat / 2)) ** 2 + Math.cos(point1[0]) *
-          (Math.sin(dlon / 2)) ** 2 * Math.cos(point2[0])
+      a = (Math.sin(lat_diff / 2)) ** 2 + Math.cos(point1[0]) *
+          (Math.sin(lon_diff / 2)) ** 2 * Math.cos(point2[0])
       c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
       c * earth_radius(options[:units] || :km)
     end
@@ -55,6 +55,7 @@ module FinleapNearby
     #
     def to_radians(*args)
       args = args.first if args.first.is_a?(Array)
+      #noinspection RubyNilAnalysis
       if args.size == 1
         args.first * (Math::PI / 180)
       else

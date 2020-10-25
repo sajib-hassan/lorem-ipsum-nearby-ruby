@@ -63,6 +63,8 @@ This gem considered the `default values` as below under the `Configuration` clas
 
 You can override these default values through initialization code in `your APP`.
 ```ruby
+# config/initializers/finleap_nearby.rb
+
 ::FinleapNearby.configure do |config|
       config.search_radius = 100 # Matching customers within this radius
       config.search_radius_unit = :km # either :km for Kilometer or :mi for Mile

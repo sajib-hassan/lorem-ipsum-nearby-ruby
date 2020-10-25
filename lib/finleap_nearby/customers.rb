@@ -65,7 +65,7 @@ module FinleapNearby
     end
 
     ##
-    # Sort the customers withy the provided column/key
+    # Sort the customers within the provided column/key
     #
     def sort_customers(sort_by)
       sort_by ||= ::FinleapNearby.configuration.result_sort_by
