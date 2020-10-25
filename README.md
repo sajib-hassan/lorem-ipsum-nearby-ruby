@@ -34,45 +34,41 @@ Or install it yourself as:
 
 #### Configuration
 
-This gem considered the `default values` as below under the `Configuration` class in `lib/finleap_nearby/configuration.rb`:
-```ruby
-    # Customer data file. Which must be -
-    # - Text file (`data/customers.json`)
-    # - one customer data per line, JSON-encoded.
-    DATA_FILE_PATH = "data/customers.json"
-
-    # Matching customers within this radius
-    SEARCH_RADIUS = 100
-
-    # Matching customers within the radius in units, default is :km
-    # Available options are -
-    # - :km for Kilometer
-    # - :mi for Mile
-    SEARCH_RADIUS_UNIT = :km
-
-    # Center point to match the customer's coordinate ([lat,lon])
-    # The GPS coordinates for Berlin office are 52.508283, 13.329657
-    CENTER_POINT = [52.508283, 13.329657]
-
-    # Matched customers sort by
-    RESULT_SORT_BY = "user_id"
-
-    # default result data keys of the matched customer data
-    DEFAULT_RESULT_DATA_KEYS = %w[user_id name]
-```
-
-You can override these default values through initialization code in `your APP`.
+This gem considered the `default values` as below under the `Config` class in `lib/finleap_nearby/config.rb`.
+But You can override these default values through initializers code in `your APP`.
 ```ruby
 # config/initializers/finleap_nearby.rb
 
 ::FinleapNearby.configure do |config|
-      config.search_radius = 100 # Matching customers within this radius
-      config.search_radius_unit = :km # either :km for Kilometer or :mi for Mile
-      config.center_point = [52.508283, 13.329657] # Center point to make search
-      config.data_file_path = "data/customers.json"  # Relative or Absolute text file path
-      config.result_sort_by = "distance"  # Sort by calculative field distance
-      config.result_data_keys = %w[user_id name distance]  # result data keys of the matched customer data
-    end
+  # Customer data file. Which must be -
+  # - Text file (default is `data/customers.json`)
+  # - one customer data per line, JSON-encoded.
+  config.data_file_path = "data/customers.json"
+
+  # Matching customers within this radius
+  # default is 100
+  config.search_radius = 100
+
+  # Matching customers within the radius in units, default is :km
+  # Available options are -
+  # - :km for Kilometer
+  # - :mi for Mile
+  config.search_radius_unit = :km
+
+  # Center point to match the customer's coordinate ([lat,lon])
+  # default center point is the GPS coordinates for Berlin office are 52.508283, 13.329657
+  config.center_point = [52.508283, 13.329657]
+
+  # Matched customers sort by
+  # default is "user_id"
+  config.result_sort_by = "user_id"
+
+  # result data keys of the matched customer data and distance
+  # for example %w[user_id name distance]
+  # default is %w[user_id name]
+  config.result_data_keys = %w[user_id name]
+  
+end 
 ```
 
 #### Use Library - `lib/finleap_nearby/customers.rb`
