@@ -1,9 +1,9 @@
 require "finleap_nearby/version"
-require 'json'
-require 'finleap_nearby/extension'
-require 'finleap_nearby/configuration'
-require 'finleap_nearby/geo_calculator'
-require 'finleap_nearby/customers'
+require "json"
+require "finleap_nearby/extension"
+require "finleap_nearby/configuration"
+require "finleap_nearby/geo_calculator"
+require "finleap_nearby/customers"
 
 module FinleapNearby
   class Error < StandardError; end
@@ -29,4 +29,3 @@ module FinleapNearby
     yield(configuration) if block_given?
   end
 end
-

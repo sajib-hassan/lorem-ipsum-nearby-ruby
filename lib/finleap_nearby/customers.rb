@@ -1,6 +1,5 @@
 module FinleapNearby
   class Customers
-
     ##
     # Override the defaults value to match the customers
     # Accept named parameters
@@ -8,14 +7,14 @@ module FinleapNearby
     def initialize(search_radius: nil, search_radius_unit: nil, data_file_path: nil, center_point: nil)
       ::FinleapNearby.config_defaults
 
-      @search_radius      = search_radius || ::FinleapNearby.configuration.search_radius
+      @search_radius = search_radius || ::FinleapNearby.configuration.search_radius
       @search_radius_unit = search_radius_unit || ::FinleapNearby.configuration.search_radius_unit
-      @data_file_path     = data_file_path || ::FinleapNearby.configuration.data_file_path
-      @center_point       = center_point || ::FinleapNearby.configuration.center_point
+      @data_file_path = data_file_path || ::FinleapNearby.configuration.data_file_path
+      @center_point = center_point || ::FinleapNearby.configuration.center_point
 
-      @search_radius      = @search_radius.to_f
+      @search_radius = @search_radius.to_f
       @search_radius_unit = @search_radius_unit.to_sym
-      @customers          = []
+      @customers = []
 
       validate_params
     end
@@ -58,7 +57,7 @@ module FinleapNearby
         raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(customer)
 
         distance = calculate_distance(customer)
-        @customers << customer.merge({ "distance" => distance }) if @search_radius >= distance
+        @customers << customer.merge({"distance" => distance}) if @search_radius >= distance
       end
 
       self
@@ -85,10 +84,8 @@ module FinleapNearby
     #
     def calculate_distance(customer)
       ::FinleapNearby::GeoCalculator.distance(@center_point,
-                                              [customer["latitude"], customer["longitude"]],
-                                              { units: @search_radius_unit }
-      ).round(3)
+        [customer["latitude"], customer["longitude"]],
+        {units: @search_radius_unit}).round(3)
     end
-
   end
 end

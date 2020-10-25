@@ -29,14 +29,13 @@ module FinleapNearby
     # required data keys in the customer data file
     REQUIRED_DATA_KEYS = %w[user_id name latitude longitude]
 
-
     def initialize
-      @search_radius      = SEARCH_RADIUS
+      @search_radius = SEARCH_RADIUS
       @search_radius_unit = SEARCH_RADIUS_UNIT
-      @center_point       = CENTER_POINT
-      @data_file_path     = DATA_FILE_PATH
-      @result_sort_by     = RESULT_SORT_BY
-      @result_data_keys   = DEFAULT_RESULT_DATA_KEYS
+      @center_point = CENTER_POINT
+      @data_file_path = DATA_FILE_PATH
+      @result_sort_by = RESULT_SORT_BY
+      @result_data_keys = DEFAULT_RESULT_DATA_KEYS
     end
   end
 end
