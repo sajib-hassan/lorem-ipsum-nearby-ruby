@@ -1,4 +1,4 @@
-module FinleapNearby
+module LoremIpsumNearby
   class Config
     attr_writer :search_radius,
       :search_radius_unit,

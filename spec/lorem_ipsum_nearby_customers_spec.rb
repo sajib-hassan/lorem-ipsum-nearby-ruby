@@ -1,10 +1,10 @@
-RSpec.describe FinleapNearby::Customers do
+RSpec.describe LoremIpsumNearby::Customers do
   before do
-    ::FinleapNearby.configure do |config|
+    ::LoremIpsumNearby.configure do |config|
       config.search_radius = 100
       config.search_radius_unit = :km
     end
-    @valid_data_file_path = ::FinleapNearby.config.data_file_path
+    @valid_data_file_path = ::LoremIpsumNearby.config.data_file_path
     @invalid_customers_file = "spec/data/invalid_customers_file.json"
     @invalid_customers_data = "spec/data/invalid_customers_data.json"
   end
@@ -14,34 +14,34 @@ RSpec.describe FinleapNearby::Customers do
       context "invalid arguments" do
         it "that has invalid data file path" do
           expect {
-            ::FinleapNearby::Customers.new(data_file_path: "data/invalid_file_path.json")
-          }.to raise_error(::FinleapNearby::InvalidFilePath)
+            ::LoremIpsumNearby::Customers.new(data_file_path: "data/invalid_file_path.json")
+          }.to raise_error(::LoremIpsumNearby::InvalidFilePath)
         end
 
         it "that has invalid search radius" do
           expect {
-            ::FinleapNearby::Customers.new(search_radius: -10)
-          }.to raise_error(::FinleapNearby::InvalidParams, /Invalid search radius =/)
+            ::LoremIpsumNearby::Customers.new(search_radius: -10)
+          }.to raise_error(::LoremIpsumNearby::InvalidParams, /Invalid search radius =/)
         end
 
         it "that has invalid search radius unit" do
           expect {
-            ::FinleapNearby::Customers.new(search_radius_unit: :kmm)
-          }.to raise_error(::FinleapNearby::InvalidParams, /Invalid search radius unit =/)
+            ::LoremIpsumNearby::Customers.new(search_radius_unit: :kmm)
+          }.to raise_error(::LoremIpsumNearby::InvalidParams, /Invalid search radius unit =/)
         end
       end
 
       context "valid arguments" do
         it "that has valid path" do
-          expect { ::FinleapNearby::Customers.new(data_file_path: @valid_data_file_path) }.not_to raise_error
+          expect { ::LoremIpsumNearby::Customers.new(data_file_path: @valid_data_file_path) }.not_to raise_error
         end
 
         it "that has valid search radius" do
-          expect { ::FinleapNearby::Customers.new(search_radius: 10) }.not_to raise_error
+          expect { ::LoremIpsumNearby::Customers.new(search_radius: 10) }.not_to raise_error
         end
 
         it "that has valid search radius unit" do
-          expect { ::FinleapNearby::Customers.new(search_radius_unit: :mi) }.not_to raise_error
+          expect { ::LoremIpsumNearby::Customers.new(search_radius_unit: :mi) }.not_to raise_error
         end
       end
     end
@@ -72,7 +72,7 @@ RSpec.describe FinleapNearby::Customers do
       it "that has valid customer data keys" do
         expect {
           File.foreach(@valid_data_file_path) do |customer|
-            raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(JSON.parse(customer))
+            raise ::LoremIpsumNearby::RequiredDataMissing, "Required data key missing" unless ::LoremIpsumNearby::Customers.valid_keys?(JSON.parse(customer))
           end
         }.not_to raise_error
       end
@@ -80,9 +80,9 @@ RSpec.describe FinleapNearby::Customers do
       it "that has invalid customer data keys" do
         expect {
           File.foreach(@invalid_customers_data) do |customer|
-            raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(JSON.parse(customer))
+            raise ::LoremIpsumNearby::RequiredDataMissing, "Required data key missing" unless ::LoremIpsumNearby::Customers.valid_keys?(JSON.parse(customer))
           end
-        }.to raise_error(::FinleapNearby::RequiredDataMissing)
+        }.to raise_error(::LoremIpsumNearby::RequiredDataMissing)
       end
     end
   end
@@ -98,7 +98,7 @@ RSpec.describe FinleapNearby::Customers do
           {"user_id" => 40, "name" => "Rafael Streich IV"}, {"user_id" => 29, "name" => "Arden Kshlerin"},
           {"user_id" => 35, "name" => "Blondell Hermiston"}, {"user_id" => 42, "name" => "Raymundo Schuster"}
         ]
-        actual_customers = ::FinleapNearby::Customers.new.filter_customers.customers
+        actual_customers = ::LoremIpsumNearby::Customers.new.filter_customers.customers
         expect(actual_customers).to eql(expected_customers)
       end
     end
@@ -122,7 +122,7 @@ RSpec.describe FinleapNearby::Customers do
           {"user_id" => 49, "name" => "Cole Predovic JD"}
         ]
 
-        actual_customers = ::FinleapNearby::Customers.new.filter_customers.sort_customers("user_id").customers
+        actual_customers = ::LoremIpsumNearby::Customers.new.filter_customers.sort_customers("user_id").customers
         expect(actual_customers).to eql(expected_customers)
       end
     end
@@ -146,25 +146,25 @@ RSpec.describe FinleapNearby::Customers do
             {"user_id" => 42, "name" => "Raymundo Schuster"},
             {"user_id" => 49, "name" => "Cole Predovic JD"}
           ]
-          actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers
+          actual_customers = ::LoremIpsumNearby::Customers.new.filter_and_sort.customers
           expect(actual_customers).to eql(expected_customers)
         end
 
         it "that has correct customers for 50 km radius" do
           expected_customers = [{"user_id" => 6, "name" => "Nolan Little"}]
-          actual_customers = ::FinleapNearby::Customers.new(search_radius: 50).filter_and_sort.customers
+          actual_customers = ::LoremIpsumNearby::Customers.new(search_radius: 50).filter_and_sort.customers
           expect(actual_customers).to eql(expected_customers)
         end
 
         it "that has no customer for 20 km radius" do
           expected_customers = []
-          actual_customers = ::FinleapNearby::Customers.new(search_radius: 20).filter_and_sort.customers
+          actual_customers = ::LoremIpsumNearby::Customers.new(search_radius: 20).filter_and_sort.customers
           expect(actual_customers).to eql(expected_customers)
         end
 
         it "no outside customers of 100 km radius should be found in the results" do
           outside_customers = {"user_id" => 3, "name" => "Mary Pacocha III"}
-          actual_customers = ::FinleapNearby::Customers.new(search_radius: 100).filter_and_sort.customers
+          actual_customers = ::LoremIpsumNearby::Customers.new(search_radius: 100).filter_and_sort.customers
           expect(actual_customers).not_to include(outside_customers)
         end
       end
@@ -189,7 +189,7 @@ RSpec.describe FinleapNearby::Customers do
           {"user_id" => 49, "name" => "Cole Predovic JD"}
         ]
 
-        actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers
+        actual_customers = ::LoremIpsumNearby::Customers.new.filter_and_sort.customers
         expect(actual_customers).to eql(expected_customers)
       end
 
@@ -209,7 +209,7 @@ RSpec.describe FinleapNearby::Customers do
           {"user_id" => 49, "name" => "Cole Predovic JD", "distance" => 72.765}
         ]
 
-        actual_customers = ::FinleapNearby::Customers.new.filter_and_sort.customers(%w[user_id name distance])
+        actual_customers = ::LoremIpsumNearby::Customers.new.filter_and_sort.customers(%w[user_id name distance])
 
         expect(actual_customers).to eql(expected_customers)
       end

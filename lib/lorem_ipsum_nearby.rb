@@ -1,11 +1,11 @@
-require "finleap_nearby/version"
+require "lorem_ipsum_nearby/version"
 require "json"
-require "finleap_nearby/extension"
-require "finleap_nearby/config"
-require "finleap_nearby/geo_calculator"
-require "finleap_nearby/customers"
+require "lorem_ipsum_nearby/extension"
+require "lorem_ipsum_nearby/config"
+require "lorem_ipsum_nearby/geo_calculator"
+require "lorem_ipsum_nearby/customers"
 
-module FinleapNearby
+module LoremIpsumNearby
   class Error < StandardError; end
 
   class InvalidFilePath < Error; end

@@ -1,4 +1,4 @@
-module FinleapNearby
+module LoremIpsumNearby
   module GeoCalculator
     extend self
 

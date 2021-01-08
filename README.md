@@ -1,25 +1,25 @@
-# Finleap - Nearby Customers
+# LoremIpsum - Nearby Customers
 
-**This is a gem for a Tech challenge for the position of (Senior) Ruby on Rails Engineer at finleap connect** 
+**This is a gem for a Tech challenge** 
 
 ## The Tech Challenge
-We have some customer records in a text file (`data/customers.json`) -- one customer data per line, JSON-encoded. We want to invite any customer within 100km of our Berlin office for some food and drinks. 
+We have some customer records in a text file (`data/customers.json`) -- one customer data per line, JSON-encoded. We want to invite any customer within 100km of our X office for some food and drinks. 
 
 Write a program that will `read the full list of customers` and output the `names and user ids` of matching customers (within `100km`), `sorted by User ID (ascending)`.
 
 - You can use the `first formula` from [this Wikipedia article](https://en.wikipedia.org/wiki/Great-circle_distance) to
 calculate distance. Don't forget, you'll need to `convert degrees to
 radians`.
-- The GPS coordinates for our `Berlin office are 52.508283,
+- The GPS coordinates for our `X office are 52.508283,
 13.329657`
-- You can find the Customer list [here](https://gist.github.com/flood4life/aa8fcb88243b6d96287c4b1dc63948de).
+- You can find the Customer list [here](https://gist.github.com/xxxxxxxxx/aaaaaaaa).
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'finleap_nearby'
+gem 'lorem_ipsum_nearby'
 ```
 
 And then execute:
@@ -28,18 +28,18 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install finleap_nearby
+    $ gem install lorem_ipsum_nearby
 
 ## Usage
 
 #### Configuration
 
-This gem considered the `default values` as below under the `Config` class in `lib/finleap_nearby/config.rb`.
+This gem considered the `default values` as below under the `Config` class in `lib/lorem_ipsum_nearby/config.rb`.
 But You can override these default values through initializers code in `your APP`.
 ```ruby
-# config/initializers/finleap_nearby.rb
+# config/initializers/lorem_ipsum_nearby.rb
 
-::FinleapNearby.configure do |config|
+::LoremIpsumNearby.configure do |config|
   # Customer data file. Which must be -
   # - Text file (default is `data/customers.json`)
   # - one customer data per line, JSON-encoded.
@@ -71,11 +71,11 @@ But You can override these default values through initializers code in `your APP
 end 
 ```
 
-#### Use Library - `lib/finleap_nearby/customers.rb`
+#### Use Library - `lib/lorem_ipsum_nearby/customers.rb`
 
 Get the matching customers data by this Gem with the default values and sort by `user_id` - 
 ```ruby
-customers = ::FinleapNearby::Customers.new.filter_and_sort.customers
+customers = ::LoremIpsumNearby::Customers.new.filter_and_sort.customers
 puts customers
 ```
 
@@ -98,7 +98,7 @@ Output:
 Alternatively, with the `named` parameters to override the defaults. 
 Also, you can sort the matched customer by passing a data key name (default is `user_id`). Valid sort key names are customer object keys, and `distance`. 
 ```ruby
-customers = ::FinleapNearby::Customers.new(
+customers = ::LoremIpsumNearby::Customers.new(
         search_radius:      50,
         search_radius_unit: :km,
         data_file_path: "data/customers.json", 
@@ -115,13 +115,13 @@ Output:
 
 #### Using `rake task` - `task/nearby_customers.rb`
 
-You can run task `finleap_nearby:customers` in the file `task/nearby_customers.rb` with the defaults and preferred result data keys `%w[user_id name distance]`. 
+You can run task `lorem_ipsum_nearby:customers` in the file `task/nearby_customers.rb` with the defaults and preferred result data keys `%w[user_id name distance]`. 
     
-    $ rake finleap_nearby:customers
+    $ rake lorem_ipsum_nearby:customers
     
 Output:
 ```shell script
-finleap_nearby git:(main) $ rake finleap_nearby:customers
+lorem_ipsum_nearby git:(main) $ rake lorem_ipsum_nearby:customers
 12 customers found within the radius 100km
 {"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
 {"user_id"=>4, "name"=>"Ernesto Breitenberg", "distance"=>51.425}
@@ -143,11 +143,11 @@ Alternatively, you can also pass the search data (sequentially accepts radius, r
 
 **Don't forget to enclosed with `"` while using parameters.** 
 
-    $ rake "finleap_nearby:customers[50,km,distance]"
+    $ rake "lorem_ipsum_nearby:customers[50,km,distance]"
 
 **Output:**
 ```shell script
-finleap_nearby git:(main) $ rake "finleap_nearby:customers[50,km,distance]" 
+lorem_ipsum_nearby git:(main) $ rake "lorem_ipsum_nearby:customers[50,km,distance]" 
 1 customer found within the radius 50km
 {"user_id"=>6, "name"=>"Nolan Little", "distance"=>41.142}
 ```

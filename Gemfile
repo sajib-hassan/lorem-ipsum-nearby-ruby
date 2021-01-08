@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in finleap_nearby.gemspec
+# Specify your gem's dependencies in lorem_ipsum_nearby.gemspec
 gemspec
 
 gem "rake", "~> 12.0"

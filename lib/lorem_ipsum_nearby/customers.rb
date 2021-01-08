@@ -1,14 +1,14 @@
-module FinleapNearby
+module LoremIpsumNearby
   class Customers
     ##
     # Override the defaults value to match the customers
     # Accept named parameters
     #
     def initialize(search_radius: nil, search_radius_unit: nil, data_file_path: nil, center_point: nil)
-      @search_radius = search_radius || ::FinleapNearby.config.search_radius
-      @search_radius_unit = search_radius_unit || ::FinleapNearby.config.search_radius_unit
-      @data_file_path = data_file_path || ::FinleapNearby.config.data_file_path
-      @center_point = center_point || ::FinleapNearby.config.center_point
+      @search_radius = search_radius || ::LoremIpsumNearby.config.search_radius
+      @search_radius_unit = search_radius_unit || ::LoremIpsumNearby.config.search_radius_unit
+      @data_file_path = data_file_path || ::LoremIpsumNearby.config.data_file_path
+      @center_point = center_point || ::LoremIpsumNearby.config.center_point
 
       @search_radius = @search_radius.to_f
       @search_radius_unit = @search_radius_unit.to_sym
@@ -18,13 +18,13 @@ module FinleapNearby
     end
 
     def self.valid_keys?(customer)
-      (::FinleapNearby.config.required_data_keys - customer.keys).empty?
+      (::LoremIpsumNearby.config.required_data_keys - customer.keys).empty?
     end
 
     def validate_params
-      raise ::FinleapNearby::InvalidParams, "Invalid search radius = #{@search_radius}" unless @search_radius > 0.0
-      raise ::FinleapNearby::InvalidParams, "Invalid search radius unit = #{@search_radius_unit}" unless [:km, :mi].include?(@search_radius_unit)
-      raise ::FinleapNearby::InvalidFilePath, "Invalid file path = #{@data_file_path}" unless File.exist?(@data_file_path)
+      raise ::LoremIpsumNearby::InvalidParams, "Invalid search radius = #{@search_radius}" unless @search_radius > 0.0
+      raise ::LoremIpsumNearby::InvalidParams, "Invalid search radius unit = #{@search_radius_unit}" unless [:km, :mi].include?(@search_radius_unit)
+      raise ::LoremIpsumNearby::InvalidFilePath, "Invalid file path = #{@data_file_path}" unless File.exist?(@data_file_path)
     end
 
     ##
@@ -41,7 +41,7 @@ module FinleapNearby
     # Get the customers with the preferred data columns/keys
     #
     def customers(data_keys = nil)
-      data_keys ||= ::FinleapNearby.config.result_data_keys
+      data_keys ||= ::LoremIpsumNearby.config.result_data_keys
       @customers.map { |customer| customer.slice(*data_keys) }
     end
 
@@ -52,7 +52,7 @@ module FinleapNearby
       File.foreach(@data_file_path) do |customer|
         customer = JSON.parse(customer)
 
-        raise ::FinleapNearby::RequiredDataMissing, "Required data key missing" unless ::FinleapNearby::Customers.valid_keys?(customer)
+        raise ::LoremIpsumNearby::RequiredDataMissing, "Required data key missing" unless ::LoremIpsumNearby::Customers.valid_keys?(customer)
 
         distance = calculate_distance(customer)
         @customers << customer.merge({"distance" => distance}) if @search_radius >= distance
@@ -65,10 +65,10 @@ module FinleapNearby
     # Sort the customers within the provided column/key
     #
     def sort_customers(sort_by)
-      sort_by ||= ::FinleapNearby.config.result_sort_by
+      sort_by ||= ::LoremIpsumNearby.config.result_sort_by
 
       return [] if @customers.empty?
-      raise ::FinleapNearby::InvalidSortKey, "Invalid sort key" unless @customers.first.has_key?(sort_by)
+      raise ::LoremIpsumNearby::InvalidSortKey, "Invalid sort key" unless @customers.first.has_key?(sort_by)
 
       @customers.sort_by! { |obj| obj[sort_by.to_s] }
 
@@ -81,7 +81,7 @@ module FinleapNearby
     # calculate distance of a customer from the center point
     #
     def calculate_distance(customer)
-      ::FinleapNearby::GeoCalculator.distance(@center_point,
+      ::LoremIpsumNearby::GeoCalculator.distance(@center_point,
         [customer["latitude"], customer["longitude"]],
         {units: @search_radius_unit}).round(3)
     end

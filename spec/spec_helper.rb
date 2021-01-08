@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "finleap_nearby"
+require "lorem_ipsum_nearby"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
